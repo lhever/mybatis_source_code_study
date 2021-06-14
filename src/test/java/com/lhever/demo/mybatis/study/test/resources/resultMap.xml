@@ -1,0 +1,71 @@
+<root>
+
+
+    <!--   简单 -->
+    <resultMap id="BlogMap" type="com.aya.mapper.Blog">
+        <id column="id" property="id"/>
+    </resultMap>
+
+
+    <!--   带有构造函数  -->
+    <resultMap id="BlogMap" type="com.aya.mapper.Blog">
+        <constructor>
+            <idArg column="pid" javaType="integer"/>
+        </constructor>
+    </resultMap>
+
+
+
+    <!--   association   -->
+    <select id="selectContent" resultType="string">
+        SELECT content FROM blog WHERE id = #{id}
+    </select>
+    <resultMap id="BlogMap" type="com.aya.mapper.Blog" >
+        <!-- 直接使用对象,在result为对象赋值 -->
+        <association property="content"  javaType="string" >
+            <result column="content" />
+        </association>
+        <!-- 使用 select 引用的查询结果,可以通过column传参 -->
+        <!-- 多参 key 是select引用需要用到变量,value是这边查询到的值 {id=id,content=content} -->
+        <association property="contentSelect" column="id" select="selectContent"  javaType="string" />
+    </resultMap>
+
+
+
+    <!-- collection  -->
+    <select id="selectContentList" resultType="string">
+        SELECT content FROM blog WHERE id = #{id}
+    </select>
+    <resultMap id="BlogMap" type="com.aya.mapper.Blog" >
+        <!-- 直接使用集合, 那么bean的集合必须初始化 -->
+        <collection property="contentList"  javaType="string" >
+            <result column="content"  />
+        </collection>
+        <!-- 通过select 获取的集合一定不会为null.  所以bean的定义可以不用初始化 -->
+        <collection property="contentListSelect" column="id" select="selectContentList"  javaType="list"  />
+    </resultMap>
+
+
+
+    <!--discriminator-->
+    <resultMap id="BlogMap" type="com.aya.mapper.Blog" >
+        <result column="pid" property="id"/>
+        <discriminator javaType="string" column="pid" >
+            <case  value="1" resultType="com.aya.mapper.Blog">
+                <result column="ptitle" property="title"/>
+            </case>
+            <case value="2" resultType="com.aya.mapper.Blog">
+                <result column="pcontent" property="title"/>
+            </case>
+        </discriminator>
+    </resultMap>
+    <!-- 防止属性自动填充 -->
+    <select id="selectAll" resultMap="BlogMap"    >
+        select id as pid,title as ptitle,content as pcontent from blog
+    </select>
+
+
+
+
+</root>
+

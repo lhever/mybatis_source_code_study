@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhever.demo.mybatis.study.dao.StudentDao">
+
+    <resultMap id="BaseResultMap" type="com.lhever.demo.mybatis.study.pojo.Student">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="address" property="address"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <collection property="scores" ofType="Score">
+            <id property="id" column="score_id" />
+            <result property="name" column="score_name"/>
+            <result property="score" column="score"/>
+            <result property="studentId" column="student_id"/>
+            <result property="createTime" column="score_create_time"/>
+        </collection>
+    </resultMap>
+
+    <sql id='TABLE_NAME'>student</sql>
+
+
+    <select id="findStudentById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        s.id, s.name, s.age, s.address, s.create_time,
+        sc.id as score_id, sc.name as score_name, sc.score as score,
+        sc.student_id as student_id, sc.create_time as score_create_time
+        FROM student s
+        LEFT JOIN score sc ON s.id = sc.student_id
+        WHERE s.id = #{id}
+    </select>
+
+
+
+
+    <resultMap type="com.lhever.demo.mybatis.study.pojo.Student" id="oneToMany">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="address" property="address"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <collection property="scores" javaType="List" ofType="Score"
+                    column="id" select="com.lhever.demo.mybatis.study.dao.ScoreDao.selectScores"/>
+    </resultMap>
+
+
+
+    <select id="findStudentById_" parameterType="int" resultMap="oneToMany">
+        select * from student where id = #{id}
+    </select>
+
+
+
+
+
+
+
+
+</mapper>

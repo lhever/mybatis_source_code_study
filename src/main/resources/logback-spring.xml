@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="300 seconds" debug="false">
+
+    <contextName>data</contextName>
+    <property name="AppName" value="demo"/>
+    <!--<property name="port" value="8001" />-->
+    <!-- 读取application.yml中的属性server.port来生成日志文件名 -->
+    <springProperty scope="context" name="port" source="server.port" defaultValue="8800"/>
+    <!-- 用来定义变量值的标签 在上下文使用 -->
+    <property name="LogHome" value="./${AppName}_${port}_logs"/>
+    <property name="LogPattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{requestId}] [%X{serviceName}]  [%thread] %-5level [%logger{36}:%line] %msg%n"/>
+
+
+    <!--输出到控制台 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LogPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!--普通日志输出到文件 -->
+    <appender name="DefaultAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LogHome}/${AppName}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LogHome}/${AppName}-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 365 days worth of history,
+                but at most 20GB -->
+            <maxFileSize>6MB</maxFileSize>
+            <maxHistory>365</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--文件达到 最大10MB时会被压缩和切割 -->
+                <maxFileSize>6MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LogPattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <!--<logger name="CardDao" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="ScoreDao" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="BookDao" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="StudentDao" level="debug">
+        <appender-ref ref="console"/>
+    </logger>-->
+
+
+
+
+    <!-- 用来指定最基础的日志输出级别 -->
+    <root level="debug">
+        <appender-ref ref="console"/>
+        <appender-ref ref="DefaultAppender"/>
+    </root>
+
+
+</configuration>

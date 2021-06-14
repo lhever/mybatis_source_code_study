@@ -1,0 +1,89 @@
+#=====================log  config============================
+#logging.level.root=debug
+debug: true
+logging:
+  forceLogReq: true
+  forceLogRsp: true
+  config: classpath:logback-spring.xml
+
+
+
+#=====================tomcat  config============================
+server:
+  port: 8811
+  servlet:
+    context-path: /demo
+  connection-timeout: 60S
+  compression:
+    enabled: true
+
+#=====================datasource============================
+pg:
+  data:
+    ip: 127.0.0.1
+    port: 5432
+    username: postgres
+    password: postgres
+    databasename: cosdb
+    param: useUnicode=true&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=UTC
+
+
+
+#=====================spring  config============================
+spring:
+  timezone: GMT+8 #Asia/Shanghai
+  application:
+    name: demo
+    host: 10.13.84.18
+  aop:
+    auto: true
+    proxy-target-class: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2539520
+      max-request-size: 2539520
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  datasource:
+    data:
+      driverClassName: org.postgresql.Driver
+      url: jdbc:postgresql://${pg.data.ip}:${pg.data.port}/${pg.data.databasename}?${pg.data.param}
+      username: ${pg.data.username}
+      password: ${pg.data.password}
+      type: com.alibaba.druid.pool.DruidDataSource
+      initialSize : 0
+      maxActive: 500
+      minIdle: 0
+      maxWait: 60000
+      useUnfairLock: true
+      testWhileIdle: true
+      validationQuery: select 1
+      testOnReturn: false
+      testOnBorrow: false
+      logAbandoned: false
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      #minEvictableIdleTimeMillis: 300000
+#  cloud:
+#    auto-registration:
+#      enabled: false
+#    service-registry:
+#      auto-registration:
+#        enabled: false
+#      enabled: false
+#    consul:
+#      ribbon:
+#        enabled: false
+#      discovery:
+#        enabled: false
+
+mybatis:
+  pagehelper:
+    enable: false
+
+
+
+

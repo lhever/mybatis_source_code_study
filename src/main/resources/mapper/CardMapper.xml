@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhever.demo.mybatis.study.dao.CardDao">
+    
+    <resultMap id="base" type="Card">
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+
+    <resultMap id="cardConst" type="Card" extends="base">
+        <constructor>
+            <idArg column="id" name="id" javaType="Integer"/>
+            <arg column="code" name="code" javaType="String"/>
+        </constructor>
+        <result column="money" property="money"/>
+        <result column="student_id" property="studentId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <select id="findCardByStudentId" parameterType="int" resultMap="cardConst">
+        SELECT * FROM card WHERE student_id = #{studentId}
+    </select>
+
+
+</mapper>

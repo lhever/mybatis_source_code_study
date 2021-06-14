@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhever.demo.mybatis.study.dao.BookDao">
+
+    <resultMap id="BaseResultMap" type="com.lhever.demo.mybatis.study.pojo.Book">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 启用自定义缓存 -->
+    <sql id='TABLE_NAME'>book</sql>
+
+    <!--   针对于Mysql这种自己维护主键的数据库，可以直接使用以下配置在插入后获取插入主键 -->
+    <insert id="addBook" parameterType="Book" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        <include refid="TABLE_NAME"/>
+        (name, price, create_time) values(#{name}, #{price}, #{createTime})
+    </insert>
+
+    <!-- 	当然，由于Mysql的自增主键可以通过SQL语句  select LAST_INSERT_ID(); 来获取的。因此针对Mysql，Mybatis也可配置如下： -->
+    <!-- 注意这里需要先查询自增主键值,  只不过该中配置需要额外的一条查询SQL!-->
+    <insert id="insert" parameterType="Book">
+        <selectKey keyProperty="id" resultType="int" order="BEFORE">
+            SELECT nextval('s_book'::regclass) as id
+        </selectKey>
+
+        insert into
+        <include refid="TABLE_NAME"/>
+        (id, name, price) values ( #{id}, #{name}, #{price} )
+    </insert>
+
+
+    <select id="getAll" resultType="Book" resultMap="BaseResultMap">
+		select * from book
+	</select>
+
+
+    <insert id="insertInBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        INSERT INTO
+        <include refid="TABLE_NAME"/>
+        (name, price, create_time) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name}, #{item.price}, #{item.createTime})
+        </foreach>
+    </insert>
+
+
+    <insert id="addAll" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            INSERT INTO
+            <include refid="TABLE_NAME"/>
+            (name, price, create_time) VALUES (#{item.name}, #{item.price}, #{item.createTime})
+        </foreach>
+    </insert>
+
+
+    <select id="getBy" resultMap="BaseResultMap" parameterType="Book">
+        select * from
+        <include refid="TABLE_NAME"/>
+        <where>
+            <if test="id != null">
+                id= #{id}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

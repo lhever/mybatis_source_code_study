@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhever.demo.mybatis.study.dao.ScoreDao">
+
+    <resultMap id="ScoreMap" type="com.lhever.demo.mybatis.study.pojo.Score">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="score" property="score"/>
+        <result column="student_id" property="studentId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <select id="selectScores" parameterType="int" resultMap="ScoreMap">
+        SELECT * FROM score WHERE student_id = #{studentId}
+    </select>
+
+
+</mapper>
