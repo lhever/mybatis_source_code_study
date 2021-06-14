@@ -36,6 +36,7 @@
 
     <artifactId>study</artifactId>
     <groupId>com.lhever.demo.mybatis</groupId>
+    <name>mybatis_source_code_study</name>
 
 
     <dependencies>
