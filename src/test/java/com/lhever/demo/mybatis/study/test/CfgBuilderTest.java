@@ -24,6 +24,8 @@ public class CfgBuilderTest {
     public void test() {
         SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
 
+        System.out.println(MybatisConfigXML.config_xml);
+
 
         SqlSessionFactory build = builder.build(new ByteArrayInputStream(XPathTest.getBytes(MybatisConfigXML.config_xml)));
 

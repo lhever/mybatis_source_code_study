@@ -16,9 +16,9 @@ public interface MybatisConfigXML {
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<!DOCTYPE configuration PUBLIC \"-//mybatis.org//DTD Config 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-config.dtd\">\n" +
             "<configuration>\n" +
-            "\t<properties resource=\"jdbc.properties\">\n" +
-            "\t\t<property name=\"username\" value=\"root\" />\n" +
-            "\t\t<property name=\"password\" value=\"123\" />\n" +
+            "\t<properties resource=\"/com/lhever/demo/mybatis/study/test/jdbc.properties\">\n" +
+            "\t\t<property name=\"username\" value=\"postgres\" />\n" +
+            "\t\t<property name=\"password\" value=\"postgres\" />\n" +
             "\t</properties>\n" +
             "\t<settings>\n" +
             "\t\t<setting name=\"localCacheScope\" value=\"STATEMENT\"/>\n" +
